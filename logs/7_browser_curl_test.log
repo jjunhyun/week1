@@ -1,0 +1,17 @@
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?8                                                                                  11:26:39  
+❯ curl http://localhost:8080
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>나의 커스텀 NGINX</title>
+</head>
+<body>
+    <h1>🐳 커스텀 Docker 이미지 실습 성공!</h1>
+    <p>NGINX 베이스 이미지 + 정적 콘텐츠 교체</p>
+    <p>만든 사람: [황준현]</p>
+</body>
+</html>
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?8                                                                                  11:29:32  
+❯ curl http://localhost:8080/health
+OK

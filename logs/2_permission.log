@@ -1,0 +1,22 @@
+  ╱  ~/codyssey/week1 ╱   main ?2                                                             10:54:01  
+❯ mkdir permission_dir
+  ╱  ~/codyssey/week1 ╱   main ?3                                                             10:55:46  
+❯ cd permission_dir   
+  ╱  ~/codyssey/week1/permission_dir ╱   main ?3                                              10:56:06  
+❯ touch permission.txt
+  ╱  ~/codyssey/week1/permission_dir ╱   main ?4                                              10:56:09  
+❯ ls -al           
+total 0
+drwxr-xr-x  3 junhyun  staff   96 Jul 28 10:56 .
+drwxr-xr-x@ 8 junhyun  staff  256 Jul 28 10:55 ..
+-rw-r--r--  1 junhyun  staff    0 Jul 28 10:56 permission.txt
+  ╱  ~/codyssey/week1/permission_dir ╱   main ?4                                              10:56:22  
+❯ chmod 444 permission.txt 
+  ╱  ~/codyssey/week1/permission_dir ╱   main ?4                                              10:57:07  
+❯ chmod 700 .                     
+  ╱  ~/codyssey/week1/permission_dir ╱   main ?4                                              10:57:23  
+❯ ls -al
+total 0
+drwx------  3 junhyun  staff   96 Jul 28 10:56 .
+drwxr-xr-x@ 8 junhyun  staff  256 Jul 28 10:55 ..
+-r--r--r--  1 junhyun  staff    0 Jul 28 10:56 permission.txt

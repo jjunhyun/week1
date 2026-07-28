@@ -1,0 +1,69 @@
+  ╱  ~/codyssey/week1 ╱   main ?1                                                                            10:43:15  
+❯ pwd
+/Users/junhyun/codyssey/week1
+%                                                                                                                 
+  ╱  ~/codyssey/week1 ╱   main ?1                                                                            10:44:26  
+❯ ls -al   
+total 24
+drwxr-xr-x@  5 junhyun  staff   160 Jul 28 10:43 .
+drwxr-xr-x@  3 junhyun  staff    96 Jul 28 00:37 ..
+drwxr-xr-x@ 13 junhyun  staff   416 Jul 28 10:43 .git
+-rw-r--r--@  1 junhyun  staff     3 Jul 28 00:37 README.md
+-rw-r--r--   1 junhyun  staff  4348 Jul 28 10:44 linux_command.txt
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?1                                                                            10:45:24  
+❯ cd ..   
+%                                                                                                                     
+  ╱  ~/codyssey                                                                                                10:45:38  
+❯ pwd
+/Users/junhyun/codyssey
+%                                                                                                                     
+  ╱  ~/codyssey                                                                                                10:45:39  
+❯ cd week1
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?1                                                                            10:45:45  
+❯ touch sample.txt   
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?2                                                                            10:45:53  
+❯ cp sample.txt copied.txt      
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:46:37  
+❯ mkdir sampleDir              
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:47:20  
+❯ mv sample.txt sampleDir      
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:47:55  
+❯ ls    
+README.md         copied.txt        linux_command.txt sampleDir
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:48:01  
+❯ cd sampleDir            
+%                                                                                                                     
+  ╱  ~/codyssey/week1/sampleDir ╱   main ?3                                                                  10:48:11  
+❯ ls
+sample.txt
+%                                                                                                                     
+  ╱  ~/codyssey/week1/sampleDir ╱   main ?3                                                                  10:48:12  
+❯ cd ..       
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:48:15  
+❯ mv sample.txt change_name.txt
+mv: rename sample.txt to change_name.txt: No such file or directory
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:48:30  
+❯ ls
+README.md         copied.txt        linux_command.txt sampleDir
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:48:34  
+❯ mv copied.txt change_name.txt
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?3                                                                            10:48:48  
+❯ rm change_name.txt 
+%                                                                                                                     
+  ╱  ~/codyssey/week1 ╱   main ?2                                                                            10:49:23  
+❯ cd sampleDir 
+%                                                                                                                     
+  ╱  ~/codyssey/week1/sampleDir ╱   main ?2                                                                  10:49:33  
+❯ cat sample.txt 
+This is sample file%                                                                                                  

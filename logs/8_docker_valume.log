@@ -1,0 +1,111 @@
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:54:35  
+❯ docker volume create my-data
+
+my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:58:43  
+❯ docker rm volume my-data
+Error response from daemon: No such container: volume
+Error response from daemon: No such container: my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:59:08  
+❯ docker volume ls
+DRIVER    VOLUME NAME
+local     0ceb7a988cc29a7430d21d788bd4ad8fb63904ef530dd70afd8b91a6ef9d5567
+local     2eec29cde06720daee29c20fcf0615d199bb497b0f91682aac17a72c6b1ac3dd
+local     8e8f7fddf13e6f3a5b66b987e6c3d92511e67cc27eb8699376cdf30397bfa2d1
+local     061bc7cd43d3951b7f67d83d30c27a412fc9c41f50cc55e02c3d645ea4f59b7e
+local     011133020c6cc1be908fee9eaf6c942a3fc4092915ff298b6f76803ad3098a79
+local     ac4bef3cdbe46f59a2ce2e9370810bf9af7000a5ec9f7d04d2aff22a91595085
+local     be003fb63f82a957c568cd48edc407ac161d9109fd96a2bb1aacd8d68911fdc5
+local     ce04537e9eea342eeb53e3435c842ee310daafe042f11224297f84960f2f22fe
+local     f3b7e5cc6144d746e206adaaeef46d80349001c6a303a770c3e9e3c4742b91b1
+local     monitoring_grafana-data
+local     monitoring_prometheus-data
+local     monitoring_tempo-data
+local     my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:59:19  
+❯ docker rm my-data
+Error response from daemon: No such container: my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:59:30  
+❯ docker volume rm my-data
+my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:59:40  
+❯ clear
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:59:43  
+❯ docker volume create my-data
+my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:59:49  
+❯ docker volume ls
+DRIVER    VOLUME NAME
+local     0ceb7a988cc29a7430d21d788bd4ad8fb63904ef530dd70afd8b91a6ef9d5567
+local     2eec29cde06720daee29c20fcf0615d199bb497b0f91682aac17a72c6b1ac3dd
+local     8e8f7fddf13e6f3a5b66b987e6c3d92511e67cc27eb8699376cdf30397bfa2d1
+local     061bc7cd43d3951b7f67d83d30c27a412fc9c41f50cc55e02c3d645ea4f59b7e
+local     011133020c6cc1be908fee9eaf6c942a3fc4092915ff298b6f76803ad3098a79
+local     ac4bef3cdbe46f59a2ce2e9370810bf9af7000a5ec9f7d04d2aff22a91595085
+local     be003fb63f82a957c568cd48edc407ac161d9109fd96a2bb1aacd8d68911fdc5
+local     ce04537e9eea342eeb53e3435c842ee310daafe042f11224297f84960f2f22fe
+local     f3b7e5cc6144d746e206adaaeef46d80349001c6a303a770c3e9e3c4742b91b1
+local     monitoring_grafana-data
+local     monitoring_prometheus-data
+local     monitoring_tempo-data
+local     my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 11:59:53  
+❯ docker run -it --name container1 -v my-data:/data ubuntu bash
+root@65aa02d318a1:/# echo "\354\235\264 \353\215\260\354\235\264\355\204\260\353\212\224 \354\202\264\354\225\204\353\202\250\354\235\204\352\271\214\354\232\224? - $(date)" > /data/test.txt
+root@65aa02d318a1:/# cat /data/test.txt
+이 데이터는 살아남을까요? - Tue Jul 28 03:00:09 UTC 2026
+root@65aa02d318a1:/# exit
+exit
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                         15s  ╱ 12:00:17  
+❯ docker rm container1
+container1
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 12:00:24  
+❯ docker ps -a
+CONTAINER ID   IMAGE                                                   COMMAND                   CREATED          STATUS                        PORTS                                     NAMES
+aecbdf739a88   my-nginx:1.0                                            "/docker-entrypoint.…"   33 minutes ago   Up 33 minutes                 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   my-web
+c33b1f4de13f   ubuntu                                                  "bash"                    49 minutes ago   Up 49 minutes                                                           my-ubuntu
+fad2269da110   ubuntu                                                  "bash"                    50 minutes ago   Exited (0) 49 minutes ago                                               cool_borg
+66ac2a6f0c57   hello-world                                             "/hello"                  50 minutes ago   Exited (0) 50 minutes ago                                               modest_hopper
+187359e232f2   ubuntu                                                  "bash"                    52 minutes ago   Exited (0) 52 minutes ago                                               charming_pascal
+326250a7627f   hello-world                                             "/hello"                  53 minutes ago   Exited (0) 53 minutes ago                                               sharp_curie
+356d41ec088b   ubuntu                                                  "bash"                    53 minutes ago   Exited (127) 53 minutes ago                                             vibrant_bhabha
+1c8cc49594f6   hello-world                                             "/hello"                  54 minutes ago   Exited (0) 54 minutes ago                                               nervous_lovelace
+05a67ab3a96c   ubuntu                                                  "bash"                    15 hours ago     Exited (130) 15 hours ago                                               sad_poincare
+301a1b41c7a6   hello-world                                             "/hello"                  15 hours ago     Exited (0) 15 hours ago                                                 loving_greider
+7bdbdd7e6794   nginx:1.25.4-alpine                                     "/docker-entrypoint.…"   4 months ago     Exited (0) 4 months ago                                                 nginx
+09cc2b9d3781   ghcr.io/final-project-gilmok/api-repo:latest            "java -jar app.jar"       4 months ago     Exited (143) 4 months ago                                               api-server
+bb6a74adcf35   ghcr.io/final-project-gilmok/gateway-repo:latest        "java -jar app.jar"       4 months ago     Exited (143) 4 months ago                                               gateway-local
+710c6ece2e08   ghcr.io/final-project-gilmok/auth-repo:latest           "java -jar app.jar"       4 months ago     Exited (143) 4 months ago                                               auth-server
+49f06937c09d   mysql:8.0                                               "docker-entrypoint.s…"   4 months ago     Exited (0) 4 months ago                                                 local-mysql
+50ce553b0529   redis:7.0                                               "docker-entrypoint.s…"   4 months ago     Exited (0) 4 months ago                                                 local-redis
+0d9ad54381ea   ghcr.io/final-project-gilmok/api-repo/frontend:latest   "/docker-entrypoint.…"   4 months ago     Exited (0) 4 months ago                                                 frontend
+ed7038fd4d6f   grafana/grafana:latest                                  "/run.sh"                 4 months ago     Exited (0) 15 hours ago                                                 grafana
+8315dffe8c71   grafana/tempo:2.3.1                                     "/tempo -config.file…"   4 months ago     Exited (1) 15 hours ago                                                 tempo
+73994214d82c   prom/prometheus:latest                                  "/bin/prometheus --c…"   4 months ago     Exited (0) 15 hours ago                                                 prometheus
+3acb8f9a1add   grafana/promtail:2.9.0                                  "/usr/bin/promtail -…"   4 months ago     Exited (0) 15 hours ago                                                 promtail
+7372ae95080d   grafana/loki:2.9.0                                      "/usr/bin/loki -conf…"   4 months ago     Exited (0) 15 hours ago                                                 loki
+f29a3c9c73aa   mysql:8.0                                               "docker-entrypoint.s…"   5 months ago     Exited (0) 3 months ago                                                 gilmok-mysql
+68bb79a44686   redis:alpine                                            "docker-entrypoint.s…"   5 months ago     Exited (0) 3 months ago                                                 gilmok-redis
+b89f429404b8   gvenzl/oracle-free:23-slim                              "container-entrypoin…"   7 months ago     Exited (137) 6 months ago                                               oracle-db
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 12:00:28  
+❯ docker volume ls
+DRIVER    VOLUME NAME
+local     0ceb7a988cc29a7430d21d788bd4ad8fb63904ef530dd70afd8b91a6ef9d5567
+local     2eec29cde06720daee29c20fcf0615d199bb497b0f91682aac17a72c6b1ac3dd
+local     8e8f7fddf13e6f3a5b66b987e6c3d92511e67cc27eb8699376cdf30397bfa2d1
+local     061bc7cd43d3951b7f67d83d30c27a412fc9c41f50cc55e02c3d645ea4f59b7e
+local     011133020c6cc1be908fee9eaf6c942a3fc4092915ff298b6f76803ad3098a79
+local     ac4bef3cdbe46f59a2ce2e9370810bf9af7000a5ec9f7d04d2aff22a91595085
+local     be003fb63f82a957c568cd48edc407ac161d9109fd96a2bb1aacd8d68911fdc5
+local     ce04537e9eea342eeb53e3435c842ee310daafe042f11224297f84960f2f22fe
+local     f3b7e5cc6144d746e206adaaeef46d80349001c6a303a770c3e9e3c4742b91b1
+local     monitoring_grafana-data
+local     monitoring_prometheus-data
+local     monitoring_tempo-data
+local     my-data
+  ╱  ~/codyssey/week1/my-nginx ╱   main ?10                                                                                 12:00:35  
+❯ docker run -it --name container2 -v my-data:/data ubuntu bash
+root@e9ede673d627:/# cat /data/test.txt
+이 데이터는 살아남을까요? - Tue Jul 28 03:00:09 UTC 2026
+root@e9ede673d627:/# exit
+exit
