@@ -50,6 +50,10 @@ drwxr-x---+ 102 junhyun  staff  3264  7월 27 19:18 ..
 /Users/junhyun/codyssey/week1
 ```
 
+> 💡 **경로 선택 기준 (호스트 vs 컨테이너)**
+> - **호스트 환경**: 내 컴퓨터의 특정 위치를 명확하게 지목해야 할 때는 **절대 경로**(`/Users/...`)를 사용하고, 현재 작업 중인 폴더 안에서 빠르게 이동하거나 소스 코드를 참조할 때는 편한 **상대 경로**(`cd week1`)를 선택합니다.
+> - **컨테이너/스크립트 환경**: 실행 환경이 바뀌어도 항상 똑같이 동작하는 **재현성**이 중요하므로, Dockerfile이나 스크립트를 작성할 때는 컨테이너 내부의 기준 **절대 경로**(`/app`, `/usr/share/nginx/html` 등)를 고정으로 사용하거나 작업 디렉터리(`WORKDIR`) 기준의 **상대 경로**로 명확히 통일해서 작성합니다.
+
 - 빈 파일 생성
 
 ```bash
@@ -116,6 +120,18 @@ drwx------  3 junhyun  staff   96 Jul 28 10:56 .
 drwxr-xr-x@ 8 junhyun  staff  256 Jul 28 10:55 ..
 -r--r--r--  1 junhyun  staff    0 Jul 28 10:56 permission.txt
 ```
+
+> 💡 **rwx 권한 비트 계산 방식 (숫자-권한 비트 매핑)**
+> 리눅스 권한 숫자(예: `755`, `644`)는 왼쪽부터 **[소유자(User)] - [그룹(Group)] - [기타 사용자(Others)]**의 3단계로 매핑됩니다. 각 자리는 읽기(`r`=4), 쓰기(`w`=2), 실행(`x`=1) 비트의 합으로 계산합니다.
+> - **`644` (`-rw-r--r--`) 계산 예시**:
+>   - 소유자: `6` (`4(r) + 2(w) + 0` = `rw-`, 읽기/쓰기 가능)
+>   - 그룹: `4` (`4(r) + 0 + 0` = `r--`, 읽기 전용)
+>   - 기타: `4` (`4(r) + 0 + 0` = `r--`, 읽기 전용)
+> - **`755` (`drwxr-xr-x`) 계산 예시**:
+>   - 소유자: `7` (`4(r) + 2(w) + 1(x)` = `rwx`, 모든 권한)
+>   - 그룹: `5` (`4(r) + 0 + 1(x)` = `r-x`, 읽기/실행 가능)
+>   - 기타: `5` (`4(r) + 0 + 1(x)` = `r-x`, 읽기/실행 가능)
+> *(참고: 디렉터리에서의 `x`(실행) 권한은 '폴더 내부로 접근/진입(`cd`)할 수 있는 권한'을 의미하여, `700`으로 바꾸면 소유자 외 다른 사용자는 해당 폴더 진입이 제한됩니다.)*
 
 ### 3. Docker 설치/점검
 
@@ -206,6 +222,10 @@ Share images, automate workflows, and more with a free Docker ID:
 For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
+
+> **💡 [참고] 이미지의 불변성(Immutability)과 컨테이너의 변경·커밋(Commit) 관점**
+> 도커 이미지는 내용이 변경되지 않는 불변(Read-Only) 레이어 구조이며, 컨테이너 실행 시 그 위에 독립적인 읽기-쓰기(Writable) 레이어가 할당되어 `ubuntu` 컨테이너에 패키지를 설치하더라도 원본 이미지는 변경되지 않습니다.
+> 컨테이너에서 일어난 이러한 변경 사항을 영구히 보존하려면 `docker commit` 명령을 사용하여 변경분을 포함하는 새로운 불변 이미지를 생성해야 합니다.
 
 - `ubuntu` 컨테이너를 실행하고 내부 진입 후 간단 명령(예: `ls`, `echo`) 수행 결과를 기록한다.
   - `i`: 상호작용(Interactive) 모드를 유지합니다.
@@ -424,6 +444,10 @@ hello
 ![alt text](images/web.png)
 ![alt text](images/curl.png)
 
+> 💡 **네임스페이스와 포트 노출 및 보안 관점**
+> - **네트워크 네임스페이스(Network Namespace) 격리**: 도커 컨테이너는 독립된 네트워크 공간(Namespace)을 가지므로, 컨테이너 내부의 80번 포트는 기본적으로 호스트(내 컴퓨터)나 외부 망과 격리되어 접근할 수 없습니다. 따라서 외부 접속을 수신하기 위해 호스트 포트와 컨테이너 포트를 연결해 주는 포트 바인딩(`-p 8080:80`)이 필요합니다.
+> - **방화벽 및 보안 주의점**: `-p 8080:80`으로 바인딩할 경우 호스트의 8080 포트가 외부에 노출됩니다. 이때 호스트 OS의 방화벽 설정이나 Cloud 보안 그룹(Security Group)에서 해당 포트가 허용되어 있어야 접근이 가능합니다. 실무에서는 불필요한 포트를 외부(`0.0.0.0`)로 오버 노출하지 않도록 주의하고, 필요한 포트만 최소한으로 공개하거나 서브넷 내 내부망(Bridge/Internal Network)으로 보호하는 보안 조치가 요구됩니다.
+
 ### 8. Docker 볼륨 영속성
 
 [8_docker_valume.log](logs/8_docker_valume.log)
@@ -478,6 +502,28 @@ hello
    exit
    ```
 
+> 💡 **바인드 마운트(Bind Mount) 예시 및 볼륨 백업/복원 절차**
+> 
+> **1) 바인드 마운트(Bind Mount) 사용 예시**
+> Docker 볼륨이 Docker 관리 영역에 데이터를 저장하는 방식이라면, **바인드 마운트**는 호스트 컴퓨터의 특정 절대 경로 폴더를 컨테이너 내부로 직접 연결합니다. 로컬 소스 코드를 수정하면 컨테이너에 즉시 반영되는 개발 환경에서 주로 활용됩니다.
+> ```bash
+> # 호스트의 /Users/junhyun/codyssey/week1/html 폴더를 컨테이너의 Nginx 웹 루트로 마운트
+> ❯ docker run -d -p 8082:80 -v /Users/junhyun/codyssey/week1/html:/usr/share/nginx/html --name bind-web nginx
+> ```
+> 
+> **2) Docker 볼륨 백업 및 복원 절차 (일회성 컨테이너 활용)**
+> Docker 볼륨(`my-data`) 내부 데이터를 백업하거나 다른 시스템으로 복원할 때, 임시 컨테이너(`--rm`)와 `tar` 명령을 조합하여 안전하게 백업 및 복구할 수 있습니다.
+> 
+> * **볼륨 정기 백업 (Backup)**: `my-data` 볼륨 내용을 압축(`backup.tar.gz`)하여 호스트의 현재 폴더로 추출
+>   ```bash
+>   ❯ docker run --rm -v my-data:/data -v $(pwd):/backup ubuntu tar cvzf /backup/backup.tar.gz -C /data .
+>   ```
+> * **볼륨 데이터 복원 (Restore)**: 압축 파일을 새 볼륨(`my-data-restore`)으로 풀어서 복구
+>   ```bash
+>   ❯ docker volume create my-data-restore
+>   ❯ docker run --rm -v my-data-restore:/data -v $(pwd):/backup ubuntu tar xvzf /backup/backup.tar.gz -C /data
+>   ```
+
 ### 9. Git 설정 및 VSCode GitHub 연동
 
 [9_git_github.log](logs/9_git_github.log)
@@ -492,6 +538,17 @@ init.defaultbranch=main
 ❯ git remote -v
 origin	git@github.com:jjunhyun/week1.git (fetch)
 origin	git@github.com:jjunhyun/week1.git (push)
+
+❯ git push                                                          
+Enumerating objects: 28, done.
+Counting objects: 100% (28/28), done.
+Delta compression using up to 10 threads
+Compressing objects: 100% (22/22), done.
+Writing objects: 100% (26/26), 966.60 KiB | 5.82 MiB/s, done.
+Total 26 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), done.
+To github.com:jjunhyun/week1.git
+   a66fb5a..dc5124d  main -> main
 ```
 
 ![alt text](images/vscode-git.png)
@@ -558,3 +615,58 @@ a019e54f56ba ubuntu "bash" Exited (0) container1
 docker rm container1
 docker run -it --name container1 -v my-data:/data ubuntu bash
 ```
+
+---
+
+**3. 웹 서버 실행 시 포트 충돌(Port Conflict) 진단 및 단계별 해결**
+
+**문제**
+컨테이너를 실행할 때 특정 포트(예: 8080)가 이미 다른 프로세스에서 사용 중이어서 실행이 실패하거나 `bind: address already in use` 오류 메시지가 발생했다.
+
+```bash
+docker run -d -p 8080:80 --name my-web my-nginx:1.0
+```
+
+오류 메시지 예시:
+```bash
+docker: Error response from daemon: driver failed programming external connectivity on endpoint my-web: Bind for 0.0.0.0:8080 failed: port is already allocated.
+```
+
+**원인**
+호스트 OS(내 컴퓨터)에서 8080 포트를 기존 웹 서비스나 백그라운드 프로세스가 점유하고 있어 도커 데몬이 포트를 바인딩할 수 없었다.
+
+**단계별 진단 및 해결 방법**
+
+1. **1단계: 충돌 포트 점유 상태 확인 (`lsof` / `ss` / `netstat`)**
+   어떤 포트가 활성화되어 있고, 8080 포트를 어떤 프로세스가 잡고 있는지 확인했다.
+   ```bash
+   ❯ lsof -i :8080
+   COMMAND   PID    USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+   java     12345 junhyun  40u  IPv6 0x1234      0t0  TCP *:http-alt (LISTEN)
+   
+   # 참고: 리눅스 환경의 경우 ss나 netstat 명령 활용 가능
+   ❯ ss -tulpn | grep 8080
+   ❯ netstat -anv | grep 8080
+   ```
+
+2. **2단계: 점유 프로세스 상세 확인 (`ps`)**
+   포트를 점유 중인 PID(`12345`)의 실행 경로 및 상세 프로세스 정보를 조회했다.
+   ```bash
+   ❯ ps -ef | grep 12345
+   junhyun 12345 1 0 10:00ttys000 0:01.20 java -jar sample-app.jar
+   ```
+
+3. **3단계: 프로세스 종료 또는 실행 포트 변경하여 재실행**
+   - **방법 A (프로세스 종료)**: 더 이상 필요 없는 테스트 프로세스라면 PID를 지정하여 종료 후 재실행한다.
+     ```bash
+     ❯ kill -9 12345
+     ❯ docker run -d -p 8080:80 --name my-web my-nginx:1.0
+     ```
+   - **방법 B (포트 변경 실행)**: 해당 프로세스를 유지해야 한다면, 호스트 외부 노출 포트를 사용 중이지 않은 다른 포트(예: 8081)로 변경하여 실행한다.
+     ```bash
+     ❯ docker run -d -p 8081:80 --name my-web my-nginx:1.0
+     
+     ❯ docker ps
+     CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                  NAMES
+     aecbdf739a88   my-nginx:1.0   "/docker-entrypoint.…"   2 seconds ago   Up 2 seconds   0.0.0.0:8081->80/tcp   my-web
+     ```
